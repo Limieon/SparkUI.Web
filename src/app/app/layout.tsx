@@ -1,9 +1,11 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
 
 import UserDropdown from '@/components/user/UserDropdown'
 
-import { Button } from '@mantine/core'
+import { ActionIcon, Button, UnstyledButton } from '@mantine/core'
 
 import {
     House as IconHome,
@@ -12,8 +14,11 @@ import {
     Workflow as IconNode,
     ListEnd as IconQueue
 } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname()
+
     const user = {
         name: 'Keqing',
         email: 'example@sparkui.io',
@@ -42,13 +47,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <div className="flex h-full flex-row">
                     <div className="m-2 flex flex-col space-y-2 shadow-md">
                         {tabs.map(t => (
-                            <Button
+                            <ActionIcon
                                 key={t.name}
+                                variant={t.href === pathname ? 'filled' : 'outline'}
                                 component={Link}
                                 href={t.href}
-                                className="flex h-10 items-center gap-2">
+                                className="w-10 h-10">
                                 <t.icon />
-                            </Button>
+                            </ActionIcon>
                         ))}
                     </div>
                     <div className="flex-1 rounded-tl-lg p-2 shadow-md" style={{ height: 'calc(100vh - 88px)' }}>

@@ -6,19 +6,22 @@ import {
     Checkbox,
     UnstyledButton,
     Input,
+    Image,
     NumberInput,
     Slider,
     Progress,
     Textarea,
     Select,
     Tabs,
-    Image,
     Modal,
     Accordion,
     ActionIcon,
-    TextInput
+    TextInput,
+    Tooltip
 } from '@mantine/core'
-import { ReactNode } from 'react'
+import { Carousel } from '@mantine/carousel'
+
+import React, { ReactNode, useState } from 'react'
 
 import {
     Zap as IconZap,
@@ -30,7 +33,14 @@ import {
     Shuffle as IconShuffle,
     Plus as IconAdd,
     Settings as IconSettings,
-    Search as IconSearch
+    Search as IconSearch,
+    Leaf as IconLeaf,
+    Text as IconText,
+    Asterisk as IconAsterisk,
+    Download as IconDownload,
+    Folder as IconFolder,
+    FolderOpen as IconFolderOpen,
+    Replace as IconReplace
 } from 'lucide-react'
 
 interface GroupTitleProps {
@@ -39,7 +49,7 @@ interface GroupTitleProps {
 }
 const Group: React.FC<GroupTitleProps> = ({ title, children }) => {
     return (
-        <div className="rounded-xl p-2">
+        <div className="rounded-xl p-2 space-y-2">
             <div>
                 <p className="text-3xl font-bold">{title}</p>
                 <hr className="mb-2" />
@@ -69,14 +79,57 @@ const ConceptItem: React.FC<ConceptItemProps> = ({ name, weight }) => {
     )
 }
 
-export default function Txt2Img() {
-    const schedulers = ['Euler A', 'DPM++ 2M', 'DPM++ 2M Karras', 'DPM++ 2M Exponential', 'DPM++ 2M Exponential Karras']
+interface ImageBoardSelectorProps {
+    name: string
+    preview: string
+}
+const ImageBoardSelector: React.FC<ImageBoardSelectorProps> = ({ name, preview }) => {
+    return (
+        <>
+            <UnstyledButton size="lg" className="space-x-2 flex justify-between items-center text-lg border-zinc-500">
+                <span>{name}</span>
+                <Image radius="sm" w={48} fit="contain" src={preview} alt="board icon" />
+            </UnstyledButton>
+        </>
+    )
+}
 
+export default function Txt2Img() {
+    const [dispalyBatches, setDispalyBatches] = useState(false)
+
+    const schedulers = ['Euler A', 'DPM++ 2M', 'DPM++ 2M Karras', 'DPM++ 2M Exponential', 'DPM++ 2M Exponential Karras']
     const dTypes = ['FP16', 'FP32']
+    const imageActions = [
+        {
+            tooltip: 'Reuse Seed',
+            icon: IconLeaf,
+            onClick: () => {}
+        },
+        {
+            tooltip: 'Reuse Prompt',
+            icon: IconText,
+            onClick: () => {}
+        },
+        {
+            tooltip: 'Reuse Settings',
+            icon: IconSettings,
+            onClick: () => {}
+        },
+        {
+            tooltip: 'Reuse All',
+            icon: IconAsterisk,
+            onClick: () => {}
+        },
+        {
+            tooltip: 'Download',
+            icon: IconDownload,
+            onClick: () => {}
+        }
+    ]
 
     return (
         <div className="flex h-full flex-row space-x-2">
-            <div className="w-1/3 overflow-y-auto flex-nowrap space-y-2 rounded-xl p-2">
+            <div className="w-[30%] overflow-y-auto flex-nowrap space-y-2 rounded-xl p-2">
                 <div className="flex items-center justify-between">
                     <div className="flex space-x-1">
                         <Button className="font-bold h-12 px-12">Generate</Button>
@@ -144,16 +197,105 @@ export default function Txt2Img() {
                     />
                 </Group>
 
-                <Group title="Base Settings">
-                    <div className="flex items-center space-x-4 w-full">
-                        <Image radius="sm" w={48} fit="contain" src="https://picsum.photos/48" alt="icon" />
-                        <Button variant="subtle" className="justify-start flex-grow">
-                            StableDiffusion Checkpoint
-                        </Button>
+                <Group title="Resources">
+                    <div className="flex w-full space-x-2">
+                        <div className="flex flex-col flex-grow">
+                            <div className="grid grid-cols-[auto_1fr] items-center gap-2">
+                                <span className="text-lg text-right">Checkpoint:</span>
+                                <div className="flex justify-between items-center w-full">
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <Image
+                                            className="block"
+                                            radius="xl"
+                                            w={48}
+                                            src="https://picsum.photos/256/256"
+                                            alt="checkpoint icon"
+                                        />
+                                        <div className="flex flex-col justify-start">
+                                            <span>StableDiffusion Checkpoint</span>
+                                            <span>V1.5</span>
+                                        </div>
+                                    </div>
+
+                                    <Button radius="xl" size="md" variant="outline" leftSection={<IconReplace />}>
+                                        Swap
+                                    </Button>
+                                </div>
+
+                                <span className="text-lg text-right">VAE:</span>
+                                <div className="flex justify-between items-center">
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <Image
+                                            className="block"
+                                            radius="xl"
+                                            w={48}
+                                            src="https://picsum.photos/256/256"
+                                            alt="checkpoint icon"
+                                        />
+                                        <div className="flex flex-col justify-start">
+                                            <span>StableDiffusion VAE</span>
+                                            <span>V1.5</span>
+                                        </div>
+                                    </div>
+
+                                    <Button radius="xl" size="md" variant="outline" leftSection={<IconReplace />}>
+                                        Swap
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <hr className="my-2" />
+                    <div className="flex space-x-2">
+                        <Accordion className="flex-grow" defaultValue="add_resources">
+                            <Accordion.Item
+                                className="grid grid-cols-[1fr_auto] items-center gap-x-2"
+                                value="add_resources">
+                                <Accordion.Control>Additional Resources</Accordion.Control>
+                                <Button
+                                    radius="xl"
+                                    variant="outline"
+                                    size="md"
+                                    leftSection={<IconAdd />}
+                                    onClick={e => {
+                                        e.stopPropagation()
+                                    }}>
+                                    Add
+                                </Button>
 
+                                <div className="col-span-2">
+                                    <Accordion.Panel>
+                                        <div className="flex w-full">
+                                            <Tabs className="w-full" variant="outline" defaultValue="lora">
+                                                <Tabs.List grow>
+                                                    <Tabs.Tab value="lora">Lora</Tabs.Tab>
+                                                    <Tabs.Tab value="embedding">Embedding</Tabs.Tab>
+                                                    <Tabs.Tab value="controlnet">ControlNet</Tabs.Tab>
+                                                </Tabs.List>
+
+                                                <Tabs.Panel value="lora">
+                                                    <div className="flex flex-col rounded-xl w-full p-2 space-y-1">
+                                                        <ConceptItem name="LoRA 1" weight={2.5} />
+                                                        <ConceptItem name="LoRA 2" weight={2.5} />
+                                                    </div>
+                                                </Tabs.Panel>
+                                                <Tabs.Panel value="embedding">
+                                                    <div className="flex flex-col rounded-xl w-full p-2 space-y-1">
+                                                        <ConceptItem name="Embedding 1" weight={2.5} />
+                                                        <ConceptItem name="Embedding 2" weight={2.5} />
+                                                    </div>
+                                                </Tabs.Panel>
+                                                <Tabs.Panel value="controlnet">Coming Soon (TM)</Tabs.Panel>
+                                            </Tabs>
+                                        </div>
+                                    </Accordion.Panel>
+                                </div>
+                            </Accordion.Item>
+                        </Accordion>
+                    </div>
+                </Group>
+
+                <Group title="Base Settings">
                     <div className="flex space-x-2">
                         <NumberInput
                             label="Steps"
@@ -177,6 +319,7 @@ export default function Txt2Img() {
                             className="w-[350px] text-center"
                             data={schedulers}
                             defaultValue={schedulers[0]}
+                            allowDeselect={false}
                         />
                     </div>
 
@@ -211,38 +354,82 @@ export default function Txt2Img() {
                         </div>
                     </div>
                 </Group>
+            </div>
 
-                <div className="flex flex-col space-y-2 rounded-xl p-2">
-                    <span className="flex">
-                        <p className="text-3xl font-bold flex-grow">Additional Resources</p>
-                        <Button>
-                            <IconAdd className="mr-2" />
-                            Add Resource
-                        </Button>
+            <div className="h-full flex flex-col flex-1 space-y-2 justify-around">
+                <div className="flex space-x-2 justify-center">
+                    {imageActions.map((e, i) => (
+                        <Tooltip label={e.tooltip} key={i}>
+                            <ActionIcon radius="xl" size="xl" onClick={e.onClick}>
+                                <e.icon />
+                            </ActionIcon>
+                        </Tooltip>
+                    ))}
+                </div>
+                <Carousel slideSize="70vh" slideGap="sm" controlSize={24} withIndicators>
+                    {[...Array(9)].map((e, i) => (
+                        <Carousel.Slide key={i}>
+                            <Image
+                                h={'70vh'}
+                                className="m-[0_auto]"
+                                fit="contain"
+                                src="https://picsum.photos/1024/512"
+                                alt="generated"
+                            />
+                        </Carousel.Slide>
+                    ))}
+                </Carousel>
+            </div>
+
+            <div className="flex flex-col h-full w-1/4 flex-shrink space-y-2">
+                <div>
+                    <div className="flex flex-col space-y-2">
+                        <div className="flex items-center space-x-2">
+                            <TextInput
+                                className="flex-grow"
+                                radius="xl"
+                                placeholder="Search Board"
+                                leftSection={<IconSearch />}
+                            />
+                            <Tooltip label="Manage Boards">
+                                <ActionIcon className="pointer-events-auto w-10 h-10" variant="outline" radius="xl">
+                                    <IconSettings />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label="Group images in batches">
+                                <ActionIcon
+                                    onClick={() => {
+                                        setDispalyBatches(!dispalyBatches)
+                                    }}
+                                    className="pointer-events-auto w-10 h-10"
+                                    radius="xl">
+                                    {dispalyBatches ? <IconFolderOpen /> : <IconFolder />}
+                                </ActionIcon>
+                            </Tooltip>
+                        </div>
+
                         <hr />
-                    </span>
 
-                    <Tabs variant="outline" defaultValue="lora">
-                        <Tabs.List grow>
-                            <Tabs.Tab value="lora">Lora</Tabs.Tab>
-                            <Tabs.Tab value="embedding">Embedding</Tabs.Tab>
-                            <Tabs.Tab value="controlnet">ControlNet</Tabs.Tab>
-                        </Tabs.List>
+                        <div className="flex flex-col space-y-2 max-h-40 overflow-y-auto">
+                            <ImageBoardSelector name="Board 1" preview="https://picsum.photos/48" />
+                            <ImageBoardSelector name="Board 2" preview="https://picsum.photos/48" />
+                            <ImageBoardSelector name="Board 3" preview="https://picsum.photos/48" />
+                        </div>
+                    </div>
+                </div>
 
-                        <Tabs.Panel value="lora">
-                            <div className="flex flex-col rounded-xl w-full p-2 space-y-1">
-                                <ConceptItem name="LoRA 1" weight={2.5} />
-                                <ConceptItem name="LoRA 2" weight={2.5} />
-                            </div>
-                        </Tabs.Panel>
-                        <Tabs.Panel value="embedding">
-                            <div className="flex flex-col rounded-xl w-full p-2 space-y-1">
-                                <ConceptItem name="Embedding 1" weight={2.5} />
-                                <ConceptItem name="Embedding 2" weight={2.5} />
-                            </div>
-                        </Tabs.Panel>
-                        <Tabs.Panel value="controlnet">Coming Soon (TM)</Tabs.Panel>
-                    </Tabs>
+                <hr />
+
+                <div className="flex flex-row justify-between flex-wrap gap-1 overflow-y-auto pr-2">
+                    {[...Array(50)].map((e, i) => (
+                        <div key={i} className="w-[19%]">
+                            <Image
+                                src="https://picsum.photos/1024/1360"
+                                alt="generated image"
+                                className="rounded-lg cursor-pointer"
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
