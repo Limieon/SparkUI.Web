@@ -265,7 +265,7 @@ export default function Txt2Img() {
                                 </Button>
                             </div>
                             <div className="flex w-full">
-                                <Tabs className="w-full" variant="outline" defaultValue="lora">
+                                <Tabs className="w-full" variant="default" defaultValue="lora">
                                     <Tabs.List grow>
                                         <Tabs.Tab value="lora">Lora</Tabs.Tab>
                                         <Tabs.Tab value="embedding">Embedding</Tabs.Tab>
@@ -308,7 +308,6 @@ export default function Txt2Img() {
                                 defaultValue={20}
                                 step={1}
                             />
-
                             <Select
                                 label="Scheduler"
                                 className="w-[350px] text-center"
@@ -321,12 +320,16 @@ export default function Txt2Img() {
                         <hr className="my-2" />
 
                         <div className="grid grid-cols-[auto_1fr_1fr_auto] gap-2 items-center">
-                            <p className="text-nowrap text-right">Seed</p>
+                            <Tooltip label="Controls image randomness; same seed produces similar images">
+                                <span className="text-nowrap text-right">Seed</span>
+                            </Tooltip>
                             <NumberInput className="pr-0 text-right" min={0} max={100} defaultValue={42} />
                             <Button leftSection={<IconShuffle />}>Shuffle Seed</Button>
                             <Switch className="text-nowrap" label="Randomize Seed" />
 
-                            <p className="text-nowrap text-right">Sub Seed</p>
+                            <Tooltip label="Secondary seed to add slight variation to the main seed">
+                                <span className="text-nowrap text-right">Sub Seed</span>
+                            </Tooltip>
                             <NumberInput className="pr-0 text-right" min={0} max={100} defaultValue={42} />
                             <Button leftSection={<IconShuffle />}>Shuffle Seed</Button>
                             <Switch className="text-nowrap" label="Randomize Seed" />
