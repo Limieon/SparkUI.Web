@@ -49,13 +49,21 @@ interface GroupTitleProps {
 }
 const Group: React.FC<GroupTitleProps> = ({ title, children }) => {
     return (
-        <div className="rounded-xl p-2 space-y-2">
-            <div>
-                <p className="text-3xl font-bold">{title}</p>
-                <hr className="mb-2" />
-            </div>
+        <Accordion.Item value={title}>
+            <Accordion.Control>{title}</Accordion.Control>
+            <Accordion.Panel>{children}</Accordion.Panel>
+        </Accordion.Item>
+    )
+}
+
+interface GroupContainerProps {
+    children: ReactNode
+}
+const GroupContainer: React.FC<GroupContainerProps> = ({ children }) => {
+    return (
+        <Accordion defaultValue={['Resources', 'Base Settings']} variant="separated" radius="lg" multiple={true}>
             {children}
-        </div>
+        </Accordion>
     )
 }
 
@@ -178,7 +186,7 @@ export default function Txt2Img() {
                     </div>
                 </div>
 
-                <Group title="Prompt">
+                <div className="flex flex-col space-y-2">
                     <Textarea
                         className="w-full"
                         variant="filled"
@@ -195,165 +203,136 @@ export default function Txt2Img() {
                         rows={3}
                         resize="vertical"
                     />
-                </Group>
+                </div>
 
-                <Group title="Resources">
-                    <div className="flex w-full space-x-2">
-                        <div className="flex flex-col flex-grow">
-                            <div className="grid grid-cols-[auto_1fr] items-center gap-2">
-                                <span className="text-lg text-right">Checkpoint:</span>
-                                <div className="flex justify-between items-center w-full">
-                                    <div className="flex flex-row items-center space-x-2">
-                                        <Image
-                                            className="block"
-                                            radius="xl"
-                                            w={48}
-                                            src="https://picsum.photos/256/256"
-                                            alt="checkpoint icon"
-                                        />
-                                        <div className="flex flex-col justify-start">
-                                            <span>StableDiffusion Checkpoint</span>
-                                            <span>V1.5</span>
+                <GroupContainer>
+                    <Group title="Resources">
+                        <div className="flex w-full space-x-2">
+                            <div className="flex flex-col flex-grow">
+                                <div className="grid grid-cols-[auto_1fr] items-center gap-2">
+                                    <span className="text-lg text-right">Checkpoint:</span>
+                                    <div className="flex justify-between items-center w-full">
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <Image
+                                                className="block"
+                                                radius="xl"
+                                                w={48}
+                                                src="https://picsum.photos/256/256"
+                                                alt="checkpoint icon"
+                                            />
+                                            <div className="flex flex-col justify-start">
+                                                <span>StableDiffusion Checkpoint</span>
+                                                <span>V1.5</span>
+                                            </div>
                                         </div>
+
+                                        <Button radius="xl" size="md" variant="outline" leftSection={<IconReplace />}>
+                                            Swap
+                                        </Button>
                                     </div>
 
-                                    <Button radius="xl" size="md" variant="outline" leftSection={<IconReplace />}>
-                                        Swap
-                                    </Button>
-                                </div>
-
-                                <span className="text-lg text-right">VAE:</span>
-                                <div className="flex justify-between items-center">
-                                    <div className="flex flex-row items-center space-x-2">
-                                        <Image
-                                            className="block"
-                                            radius="xl"
-                                            w={48}
-                                            src="https://picsum.photos/256/256"
-                                            alt="checkpoint icon"
-                                        />
-                                        <div className="flex flex-col justify-start">
-                                            <span>StableDiffusion VAE</span>
-                                            <span>V1.5</span>
+                                    <span className="text-lg text-right">VAE:</span>
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <Image
+                                                className="block"
+                                                radius="xl"
+                                                w={48}
+                                                src="https://picsum.photos/256/256"
+                                                alt="checkpoint icon"
+                                            />
+                                            <div className="flex flex-col justify-start">
+                                                <span>StableDiffusion VAE</span>
+                                                <span>V1.5</span>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <Button radius="xl" size="md" variant="outline" leftSection={<IconReplace />}>
-                                        Swap
-                                    </Button>
+                                        <Button radius="xl" size="md" variant="outline" leftSection={<IconReplace />}>
+                                            Swap
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="flex space-x-2">
-                        <Accordion className="flex-grow" defaultValue="add_resources">
-                            <Accordion.Item
-                                className="grid grid-cols-[1fr_auto] items-center gap-x-2"
-                                value="add_resources">
-                                <Accordion.Control>Additional Resources</Accordion.Control>
-                                <Button
-                                    radius="xl"
-                                    variant="outline"
-                                    size="md"
-                                    leftSection={<IconAdd />}
-                                    onClick={e => {
-                                        e.stopPropagation()
-                                    }}>
+                        <hr className="my-2" />
+
+                        <div className="flex space-x-2 flex-col space-y-2">
+                            <div className="text-xl flex items-center">
+                                <span className="flex-grow">Additional Resources</span>
+                                <Button variant="outline" radius="xl" size="md" leftSection={<IconAdd />}>
                                     Add
                                 </Button>
+                            </div>
+                            <div className="flex w-full">
+                                <Tabs className="w-full" variant="outline" defaultValue="lora">
+                                    <Tabs.List grow>
+                                        <Tabs.Tab value="lora">Lora</Tabs.Tab>
+                                        <Tabs.Tab value="embedding">Embedding</Tabs.Tab>
+                                        <Tabs.Tab value="controlnet">ControlNet</Tabs.Tab>
+                                    </Tabs.List>
 
-                                <div className="col-span-2">
-                                    <Accordion.Panel>
-                                        <div className="flex w-full">
-                                            <Tabs className="w-full" variant="outline" defaultValue="lora">
-                                                <Tabs.List grow>
-                                                    <Tabs.Tab value="lora">Lora</Tabs.Tab>
-                                                    <Tabs.Tab value="embedding">Embedding</Tabs.Tab>
-                                                    <Tabs.Tab value="controlnet">ControlNet</Tabs.Tab>
-                                                </Tabs.List>
-
-                                                <Tabs.Panel value="lora">
-                                                    <div className="flex flex-col rounded-xl w-full p-2 space-y-1">
-                                                        <ConceptItem name="LoRA 1" weight={2.5} />
-                                                        <ConceptItem name="LoRA 2" weight={2.5} />
-                                                    </div>
-                                                </Tabs.Panel>
-                                                <Tabs.Panel value="embedding">
-                                                    <div className="flex flex-col rounded-xl w-full p-2 space-y-1">
-                                                        <ConceptItem name="Embedding 1" weight={2.5} />
-                                                        <ConceptItem name="Embedding 2" weight={2.5} />
-                                                    </div>
-                                                </Tabs.Panel>
-                                                <Tabs.Panel value="controlnet">Coming Soon (TM)</Tabs.Panel>
-                                            </Tabs>
+                                    <Tabs.Panel value="lora">
+                                        <div className="flex flex-col rounded-xl w-full p-2 space-y-1">
+                                            <ConceptItem name="LoRA 1" weight={2.5} />
+                                            <ConceptItem name="LoRA 2" weight={2.5} />
                                         </div>
-                                    </Accordion.Panel>
-                                </div>
-                            </Accordion.Item>
-                        </Accordion>
-                    </div>
-                </Group>
+                                    </Tabs.Panel>
+                                    <Tabs.Panel value="embedding">
+                                        <div className="flex flex-col rounded-xl w-full p-2 space-y-1">
+                                            <ConceptItem name="Embedding 1" weight={2.5} />
+                                            <ConceptItem name="Embedding 2" weight={2.5} />
+                                        </div>
+                                    </Tabs.Panel>
+                                    <Tabs.Panel value="controlnet">Coming Soon (TM)</Tabs.Panel>
+                                </Tabs>
+                            </div>
+                        </div>
+                    </Group>
 
-                <Group title="Base Settings">
-                    <div className="flex space-x-2">
-                        <NumberInput
-                            label="Steps"
-                            className="pr-0 text-center"
-                            min={1}
-                            max={100}
-                            defaultValue={35}
-                            step={1}
-                        />
-                        <NumberInput
-                            label="CFG Scale"
-                            className="pr-0 text-center"
-                            min={1}
-                            max={100}
-                            defaultValue={20}
-                            step={1}
-                        />
+                    <Group title="Base Settings">
+                        <div className="flex space-x-2">
+                            <NumberInput
+                                label="Steps"
+                                className="pr-0 text-center"
+                                min={1}
+                                max={100}
+                                defaultValue={35}
+                                step={1}
+                            />
+                            <NumberInput
+                                label="CFG Scale"
+                                className="pr-0 text-center"
+                                min={1}
+                                max={100}
+                                defaultValue={20}
+                                step={1}
+                            />
 
-                        <Select
-                            label="Scheduler"
-                            className="w-[350px] text-center"
-                            data={schedulers}
-                            defaultValue={schedulers[0]}
-                            allowDeselect={false}
-                        />
-                    </div>
-
-                    <hr className="my-2" />
-
-                    <div className="grid grid-cols-[1fr_2fr_2fr_2fr] gap-2 items-center">
-                        <p className="text-nowrap">Seed</p>
-                        <NumberInput className="pr-0 text-right" min={0} max={100} defaultValue={42} />
-                        <Button>
-                            <span className="flex flex-row items-center space-x-2">
-                                <IconShuffle />
-                                <span>Shuffle Seed</span>
-                            </span>
-                        </Button>
-
-                        <div className="flex items-center space-x-2">
-                            <Switch className="text-nowrap" label="Randomize Seed" />
+                            <Select
+                                label="Scheduler"
+                                className="w-[350px] text-center"
+                                data={schedulers}
+                                defaultValue={schedulers[0]}
+                                allowDeselect={false}
+                            />
                         </div>
 
-                        <p className="text-nowrap">Sub Seed</p>
-                        <NumberInput className="pr-0 text-right" min={0} max={100} defaultValue={42} />
+                        <hr className="my-2" />
 
-                        <Button className="flex-grow">
-                            <span className="flex flex-row items-center space-x-2">
-                                <IconShuffle />
-                                <span>Shuffle Seed</span>
-                            </span>
-                        </Button>
+                        <div className="grid grid-cols-[auto_1fr_1fr_auto] gap-2 items-center">
+                            <p className="text-nowrap text-right">Seed</p>
+                            <NumberInput className="pr-0 text-right" min={0} max={100} defaultValue={42} />
+                            <Button leftSection={<IconShuffle />}>Shuffle Seed</Button>
+                            <Switch className="text-nowrap" label="Randomize Seed" />
 
-                        <div className="flex itemsc-center space-x-2">
+                            <p className="text-nowrap text-right">Sub Seed</p>
+                            <NumberInput className="pr-0 text-right" min={0} max={100} defaultValue={42} />
+                            <Button leftSection={<IconShuffle />}>Shuffle Seed</Button>
                             <Switch className="text-nowrap" label="Randomize Seed" />
                         </div>
-                    </div>
-                </Group>
+                    </Group>
+                </GroupContainer>
             </div>
 
             <div className="h-full flex flex-col flex-1 space-y-2 justify-around">
