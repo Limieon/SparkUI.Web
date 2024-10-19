@@ -26,6 +26,7 @@
     "@tiptap/pm": "^2.8.0",
     "@tiptap/react": "^2.8.0",
     "@tiptap/starter-kit": "^2.8.0",
+    "blurhash": "^2.0.5",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^7.1.0",
     "framer-motion": "^11.11.9",

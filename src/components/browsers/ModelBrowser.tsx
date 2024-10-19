@@ -101,10 +101,16 @@ const ModelBrowser: React.FC<ModelBrowserProps> = ({}) => {
     const model: ModelCardProps = {
         name: 'StableDiffusion Checkpoint',
         version: 'V1.5',
-        thumbnail: 'https://picsum.photos/768/1024',
-        tags: ['standard'],
+        thumbnail: 'https://picsum.photos/512/1024',
+        thumbnailHash: 'LcKmkjV[.S%L?^S1%MbuXnS0%0RP',
+        tags: [
+            { name: 'Tag 1', color: 0xa29bfe },
+            { name: 'Tag 2', color: 0xe84393 }
+        ],
         baseModel: 'SD1.5',
-        type: ModelType.Checkpoint
+        type: ModelType.Checkpoint,
+        badges: ['LORA', 'SD1.5'],
+        installed: true
     }
 
     const availableModelTypes = ['VAE', 'Checkpoint', 'Embedding', 'ControlNet']
@@ -143,11 +149,11 @@ const ModelBrowser: React.FC<ModelBrowserProps> = ({}) => {
                 </div>
             </div>
 
-            <Drawer.Root position="right" opened={filtersOpen} onClose={closeFilters} title="Filters">
+            <Drawer.Root position="right" opened={filtersOpen} onClose={closeFilters}>
                 <Drawer.Overlay />
                 <Drawer.Content>
                     <Drawer.Header>
-                        <Drawer.Title>Drawer title</Drawer.Title>
+                        <Drawer.Title>Filters</Drawer.Title>
                         <Drawer.CloseButton />
                     </Drawer.Header>
                     <Drawer.Body className="h-[calc(100%_-60px)] flex flex-col">
