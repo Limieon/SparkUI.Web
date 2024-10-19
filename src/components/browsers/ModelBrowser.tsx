@@ -102,12 +102,10 @@ const ModelBrowser: React.FC<ModelBrowserProps> = ({}) => {
         name: 'StableDiffusion Checkpoint',
         version: 'V1.5',
         thumbnail: 'https://picsum.photos/512/1024',
-        thumbnailHash: 'LcKmkjV[.S%L?^S1%MbuXnS0%0RP',
         tags: [
             { name: 'Tag 1', color: 0xa29bfe },
             { name: 'Tag 2', color: 0xe84393 }
         ],
-        baseModel: 'SD1.5',
         type: ModelType.Checkpoint,
         badges: ['LORA', 'SD1.5'],
         installed: true

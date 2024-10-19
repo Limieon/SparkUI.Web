@@ -1,54 +1,6 @@
-import {
-    Button,
-    Switch,
-    Checkbox,
-    UnstyledButton,
-    Input,
-    Image,
-    NumberInput,
-    Slider,
-    Progress,
-    Textarea,
-    Select,
-    Tabs,
-    Modal,
-    Accordion,
-    ActionIcon,
-    TextInput,
-    Tooltip,
-    TagsInput,
-    Drawer,
-    Affix,
-    Transition,
-    Badge
-} from '@mantine/core'
+import { UnstyledButton, Image, Tooltip, Badge } from '@mantine/core'
 
-import React, { ReactNode, useState } from 'react'
-
-import {
-    Zap as IconZap,
-    X as IconX,
-    Trash2 as IconTrash,
-    Timer as IconTimer,
-    CircleGauge as IconSpeed,
-    LoaderCircle as IconProgress,
-    Shuffle as IconShuffle,
-    Plus as IconAdd,
-    Settings as IconSettings,
-    Search as IconSearch,
-    Leaf as IconLeaf,
-    Text as IconText,
-    Asterisk as IconAsterisk,
-    Download as IconDownload,
-    Folder as IconFolder,
-    FolderOpen as IconFolderOpen,
-    Replace as IconReplace,
-    Filter as IconFilter,
-    ArrowUp as IconArrowUp
-} from 'lucide-react'
-
-import { useDisclosure } from '@mantine/hooks'
-import BlurHashImage from '@/components/BlurHashImage'
+import React from 'react'
 
 export enum ModelType {
     Checkpoint,
@@ -59,24 +11,12 @@ export interface ModelCardProps {
     name: string
     version: string
     thumbnail: string
-    thumbnailHash: string
     tags: { name: string; color: number }[]
-    baseModel: string
     type: ModelType
     badges: string[]
     installed: boolean
 }
-const ModelCard: React.FC<ModelCardProps> = ({
-    name,
-    version,
-    thumbnail,
-    thumbnailHash,
-    tags,
-    baseModel,
-    type,
-    badges,
-    installed
-}) => {
+const ModelCard: React.FC<ModelCardProps> = ({ name, version, thumbnail, tags, type, badges, installed }) => {
     return (
         <UnstyledButton className="relative bg-zinc-800 rounded-lg flex border-none flex-col items-center w-[13.8%] hover:brightness-75 transition-[filter] aspect-[5_/_7] duration-300 ease-out space-y-1 overflow-hidden">
             <Image src={thumbnail} alt={`${name} thumbnail`} className="flex h-full flex-grow" fit="cover" />
