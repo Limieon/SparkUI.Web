@@ -12,7 +12,8 @@ import {
     Type as IconText,
     Image as IconImage,
     Workflow as IconNode,
-    ListEnd as IconQueue
+    ListEnd as IconQueue,
+    Globe as IconGlobe
 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
@@ -31,6 +32,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         { name: 'Text to Image', href: '/app/txt2img', icon: IconText },
         { name: 'Image to Image', href: '/app/img2img', icon: IconImage },
         { name: 'Node Editor', href: '/app/nodes', icon: IconNode },
+        { name: 'Model Browser', href: '/app/browser', icon: IconGlobe },
         { name: 'Generation Queue', href: '/app/queue', icon: IconQueue }
     ]
 
@@ -57,7 +59,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             </ActionIcon>
                         ))}
                     </div>
-                    <div className="flex-1 rounded-tl-lg p-2 shadow-md" style={{ height: 'calc(100vh - 88px)' }}>
+                    <div
+                        className="flex-1 w-full h-full rounded-tl-lg p-2 shadow-md"
+                        style={{ height: 'calc(100vh - 88px)' }}>
                         {children}
                     </div>
                 </div>
